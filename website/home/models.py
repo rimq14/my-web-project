@@ -15,7 +15,9 @@ class Functions(models.Model):
         return self.cd
 
     class Meta:
+        # 给模型类定义一个别名
         verbose_name = '功能'
+        # 给模型类定义别名的函数
         verbose_name_plural = verbose_name
 
 # 变化检测
