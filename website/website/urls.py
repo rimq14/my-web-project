@@ -1,4 +1,4 @@
-"""web_1 URL Configuration
+"""website URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -19,9 +19,6 @@ from django.urls import path
 from django.urls import include
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-]
-
-urlpatterns += [
     path('home/', include('home.urls')),
+    path('admin/', admin.site.urls),
 ]
