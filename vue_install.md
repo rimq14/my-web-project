@@ -72,7 +72,9 @@ vue的安装：
 5.可以在文件夹看到安装目录
 
 
-
+未指定版本默认最新版本的安装，旧版本的卸载
+卸载2.x版本 npm uninstall vue-cli -g
+卸载3.x版本 npm uninstall @vue/cli -g
 
 
 
