@@ -1,9 +1,15 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
 from . import views
+
+router = DefaultRouter()
+router.register('home', views.FunctionsViewSet)
+
 
 urlpatterns = [
     # /home/
-    path('', views.index, name='index'),
+    path('', include(router.urls)),
     # # /home/choices
     # path('menu/', views.menu, name='menu'),
     # # /home/choices/1

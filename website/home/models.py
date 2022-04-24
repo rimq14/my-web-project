@@ -5,20 +5,21 @@ from django.db import models
 # 变化检测，目标提取，目标检测，地物分类
 # Change Detection, extraction of target, target detection, classification of objects
 class Functions(models.Model):
+    cd = models.CharField(max_length=30)
     # 训练模型
-    cd  = models.ForeignKey('Cd', on_delete=models.SET_NULL, null=True)
+    # cd  = models.ForeignKey('Cd', on_delete=models.SET_NULL, null=True)
     # eot = models.ForeignKey('Eot', on_delete=models.SET_NULL, null=True)
     # td  = models.ForeignKey('Td', on_delete=models.SET_NULL, null=True)
     # coo = models.ForeignKey('Coo', on_delete=models.SET_NULL, null=True)
 
-    def __str__(self):
-        return self.cd
-
-    class Meta:
-        # 给模型类定义一个别名
-        verbose_name = '功能'
-        # 给模型类定义别名的函数
-        verbose_name_plural = verbose_name
+    # def __str__(self):
+    #     return self.cd
+    #
+    # class Meta:
+    #     # 给模型类定义一个别名
+    #     verbose_name = '功能'
+    #     # 给模型类定义别名的函数
+    #     verbose_name_plural = verbose_name
 
 # 变化检测
 class Cd(models.Model):
@@ -38,25 +39,25 @@ class Cd(models.Model):
     class Meta:
         verbose_name = '变化检测'
         verbose_name_plural = verbose_name
-
-
-# # # 目标提取
-# # class Eot(models.Model):
-# #     eot_out = models
-#
-# # 目标检测
-# class Td(models.Model):
-#     # 检测相同的数量
-#     td_num = models.IntegerField()
-#     # 存储的模型文件
-#
-#     # 输出的结果图
-#     td_out = models.ForeignKey(Pic, on_delete=models.SET_NULL, null=True)
 #
 #
-# # 地物分类
-# class Coo(models.Model):
-
+# # # # 目标提取
+# # # class Eot(models.Model):
+# # #     eot_out = models
+# #
+# # # 目标检测
+# # class Td(models.Model):
+# #     # 检测相同的数量
+# #     td_num = models.IntegerField()
+# #     # 存储的模型文件
+# #
+# #     # 输出的结果图
+# #     td_out = models.ForeignKey(Pic, on_delete=models.SET_NULL, null=True)
+# #
+# #
+# # # 地物分类
+# # class Coo(models.Model):
+#
 # 图片
 class Pic(models.Model):
     outpic = models.ImageField(height_field=1024, width_field=1024)

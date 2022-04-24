@@ -27,16 +27,16 @@ SECRET_KEY = 'django-insecure-lk-%wi-iw+#v1&eh0guxcfy56&d)@1x_c=1orqay24v7q&9#x%
 # 关闭调试模式
 DEBUG = False
 # 允许的服务器
-ALLOWED_HOSTS = ['118.31.51.208']
-# 静态文件收集目录
-STATIC_ROOT = os.path.join(BASE_DIR, 'collected_static')
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     # 添加home应用
-    'home.apps.HomeConfig',
+    'home',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
