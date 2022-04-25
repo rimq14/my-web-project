@@ -1,95 +1,65 @@
+<!--显示模板-->
 <template>
   <div class="hello">
+    <!--文本插值-->
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+    <!-- show books list -->
     <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
+      <!-- 指令是带有v-前缀的特殊属性-->
+      <li v-for="(book, index) in books" :key="index" style="display:block">
+        {{index}}-{{book.name}}--{{book.author}}
       </li>
     </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+    <!-- form to add a book -->
+    <form action="">
+      <!--在 input 输入框中我们可以使用 v-model 指令来实现双向数据绑定：-->
+      输入书名：<input type="text" placeholder="book name" v-model="inputBook.name"><br>
+      输入作者：<input type="text" placeholder="book author" v-model="inputBook.author"><br>
+    </form>
+    <!-- v-on 缩写   v-on:click=""  ==  @click=""-->
+    <button type="submit" @click="bookSubmit()">submit</button>
   </div>
 </template>
 
+<!--处理逻辑-->
 <script>
+import {getBooks, postBook} from '../api/api.js'
 export default {
   name: 'HelloWorld',
-  data () {
+  // 定义属性，并设置初始值
+  data() {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'web前端',
+      // books list data
+      books: [
+        {name: 'test', author: 't'},
+        {name: 'test2', author: 't2'}
+      ],
+      // book data in the form
+      inputBook: {
+        "name": "",
+        "author": "",
+      }
     }
+  },
+  // 使用的函数
+  methods: {
+    // load books list when visit the page
+    loadBooks() {
+      getBooks().then(response => {
+        this.books = response.data
+      })
+    },
+    // add a book to backend when click the button
+    bookSubmit() {
+      postBook(this.inputBook.name, this.inputBook.author).then(response => {
+        console.log(response)
+        this.loadBooks()
+      })
+    }
+  },
+  created: function () {
+    this.loadBooks()
   }
 }
 </script>

@@ -7,8 +7,11 @@ import router from './router'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
+// 创建和挂载根实例，从而让整个应用都有路由功能
 new Vue({
+  // DOM元素，挂载视图模型
   el: '#app',
+
   router,
   components: { App },
   template: '<App/>'
