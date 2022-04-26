@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import router from './router/router'
 
 Vue.config.productionTip = false
 
@@ -11,8 +11,7 @@ Vue.config.productionTip = false
 new Vue({
   // DOM元素，挂载视图模型
   el: '#app',
+  router,   // 挂在路由
+  render: h => h(App),
 
-  router,
-  components: { App },
-  template: '<App/>'
 })
