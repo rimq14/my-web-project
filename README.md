@@ -12,4 +12,9 @@ website 为项目文件夹，home为创建的web应用
 3.vue+django实现了一个基本的book_demo前后端分离实例
 
 4.vue如何进行路由的分配呢？
-为了解决单页问题，采用vue+vue router，那么vue router又如何进行其他urls的跳转呢？
+为了解决单页问题，采用vue+vue router，通过vue router进行路由的跳转
+
+5.现阶段还未对前端页面进行美化，后续该如何选择呢？
+boostrap 直接使用还是使用boostrap-vue
+
+6.目前对vue有了一定的理解，但是对app.vue的作用仍然有点迷惑。app.vue的作用？
