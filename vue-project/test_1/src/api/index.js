@@ -1,4 +1,4 @@
-//对axios进行配置
+// 对axios进行配置
 import Vue from 'vue'
 import Axios from 'axios'
 

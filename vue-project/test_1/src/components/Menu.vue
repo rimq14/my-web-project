@@ -1,3 +1,4 @@
+<!--展示模板-->
 <template>
   <div class="menu">
     <h1>{{ msg }}</h1>
@@ -16,9 +17,9 @@
   </div>
 </template>
 
+<!--导入文件和数据-->
 <script>
 import {getBooks,postBook} from "../api/api"
-
 export default {
   name: 'Menu',
   data () {
@@ -54,3 +55,8 @@ export default {
   }
 }
 </script>
+
+<!--布局-->
+<style scoped>
+
+</style>
