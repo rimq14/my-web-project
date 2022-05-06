@@ -9,8 +9,13 @@ export const getPic = () => {
 }
 
 // axios post
-export const postPic = () => {
-  return axios.post('http://127.0.0.1:8000/api/pic/')
+export const postPic = (params) => {
+  return axios.request({
+    url:'api/pic/',
+    method:'post',
+    headers:{'Content-Type':'multipart/form-data'},
+    data:params
+  })
 }
 
 //书本数据
