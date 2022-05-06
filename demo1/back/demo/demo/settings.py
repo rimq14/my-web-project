@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os.path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-w9%#+8#-7fs-$61w&r7$&hjcf(==$8u#t$3efdk@v*@)v9vw9%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 添加模块和应用
-    'app',
     'corsheaders',
-    'rest_framework'
+    'rest_framework',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -48,7 +48,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 这个导入不能太后
     'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -57,7 +56,8 @@ MIDDLEWARE = [
 ]
 
 # 支持跨域配置开始
-CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_HEADERS = ('*') #允许所有的请求头
 CORS_ALLOW_CREDENTIALS = True # 允许携带cookie
 
 ROOT_URLCONF = 'demo.urls'
@@ -79,35 +79,6 @@ TEMPLATES = [
 ]
 
 
-
-# CORS_ORIGIN_WHITELIST = ( # 设置白名单
-#     'http://127.0.0.1:8080',
-#     'http://localhost:8080',
-# )
-# CORS_ALLOW_METHODS = ( # 设置请求方法
-#     'DELETE',
-#     'GET',
-#     'POST',
-#     'OPTIONS',
-#     'PATCH',
-#     'PUT',
-#     'VIEW',
-# )
-# CORS_ALLOW_HEADERS = ( # 设置请求头的内容
-#     'XMLHttpRequest',
-#     'X_FILENAME',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-request-with',
-#     'Pragma',
-# )
-# # 支持跨域配置结束
-
 WSGI_APPLICATION = 'demo.wsgi.application'
 
 
@@ -116,8 +87,12 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'website',      # 数据库名字
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
+        'USER': 'root',
+        'PASSWORD': 'root'
     }
 }
 
@@ -156,7 +131,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
+STATIC_ROOT=os.path.join(BASE_DIR,'static')  #用于处理静态文件
+
+MEDIA_ROOT=os.path.join(BASE_DIR,'media').replace('\\', '/') # 用于处理上传的文件
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
