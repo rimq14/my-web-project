@@ -22,29 +22,16 @@
             </el-col>
           </el-row>
 
-
           <el-row>
             <el-main>
-              <el-col :span="24">
-                <el-image :src="src" style="width: 280px;height: 100px"></el-image>
-              </el-col>
+              <el-image :src="src" style="width: 280px;height: 100px"></el-image>
             </el-main>
           </el-row>
-
         </el-aside>
 
         <!--  中间容器  -->
         <el-main>
-
-          <div class="demo-image__placeholder">
-            <div class="block">
-              <el-image :src="src" style="width: 600px;height: 400px">
-                <div slot="placeholder" class="image-slot">
-                  加载中<span class="dot">...</span>
-                </div>
-              </el-image>
-            </div>
-          </div>
+           <el-image :src="src" style="width: 280px;height: 100px"></el-image>
         </el-main>
       </el-container>
     </el-container>
@@ -57,8 +44,7 @@ export default {
   data() {
     return {
       activeIndex: '1',
-      activeIndex2: '1',
-       src: 'http://127.0.0.1:8000/media/pictures/49dbfa90fa.jpg'
+       src: 'http://127.0.0.1:8000/media/pictures/82d8c7c349.png'
     };
   },
   methods: {
@@ -70,6 +56,9 @@ export default {
 </script>
 
 <style scoped>
+.el-container{
+  height: fit-content;
+}
   .el-header {
     background-color: #B3C0D1;
     color: #333;

@@ -1,5 +1,7 @@
 // 对后端进行请求
 import axiosInstance from './index'
+import {config} from "shelljs";
+
 
 const axios = axiosInstance
 // 图片数据
@@ -11,9 +13,11 @@ export const getPic = () => {
 // axios post
 export const postPic = (params) => {
   return axios.request({
-    url:'api/pic/',
+    url:'/api/pic/',
     method:'post',
-    headers:{'Content-Type':'multipart/form-data'},
+    headers:{
+      'Content-Type':'multipart/form-data'
+    },
     data:params
   })
 }

@@ -1,6 +1,5 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-
 from . import views
 
 # 使用router来注册viewset，让urlconf自动生成

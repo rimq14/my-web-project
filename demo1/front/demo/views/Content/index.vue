@@ -5,7 +5,7 @@
       <el-main>
         <div>
           <nav class="nav align-items-center">
-            <nav-item>功能选择</nav-item>
+            <h1>功能选择</h1>
           </nav>
         </div>
 
@@ -35,18 +35,11 @@
 <script>
 export default {
   name: "index",
-  data() {
-    return {
-      activeIndex: '1',
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    }
-  }
+
 }
 </script>
+
+
 
 <style scoped>
 .el-header {

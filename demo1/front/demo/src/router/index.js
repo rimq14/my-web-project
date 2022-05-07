@@ -29,6 +29,13 @@ export default new Router({
       path:'/change_detection',   // 变化检测
       name:'change_detection',
       component:() => import('../../views/change_detection/index')
+      // children:[
+      //   {
+      //     path:'detail',
+      //     name:'detail',
+      //     component:() => import('../../views/change_detection/detail')
+      //   }
+      // ]
     }
   ]
 })
