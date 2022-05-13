@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <el-container>
-      <el-header></el-header>
+      <el-header> 标题</el-header>
       <el-main>
         <div>
           <nav class="nav align-items-center">
@@ -45,7 +45,7 @@ export default {
 .el-header {
   background-color: #B3C0D1;
   color: #333;
-  /*text-align: center;*/
+  text-align: center;
   line-height: 60px;
 
 }
@@ -55,11 +55,6 @@ export default {
   color: #333;
   text-align: center;
   line-height: 160px;
-}
-
-.nav {
-  text-align: center;
-  line-height: 60px;
 }
 
 

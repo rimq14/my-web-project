@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div class="target">
+    <h1>目标检测</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: "target_detection"
 }
 </script>
 

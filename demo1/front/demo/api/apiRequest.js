@@ -1,6 +1,7 @@
 // 对后端进行请求
 import axiosInstance from './index'
 import {config} from "shelljs";
+import {data} from "autoprefixer";
 
 
 const axios = axiosInstance
@@ -22,14 +23,4 @@ export const postPic = (params) => {
   })
 }
 
-//书本数据
-// axios get方法
-export const getBooks = () => {
-  return axios.get(`http://localhost:8000/api/books/`)
-}
 
-// axios post方法
-export const postBook = (bookName, bookAuthor) => {
-  return axios.post(`http://localhost:8000/api/books/`,
-    {'name': bookName, 'author': bookAuthor})
-}

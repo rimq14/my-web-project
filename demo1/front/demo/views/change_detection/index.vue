@@ -1,56 +1,56 @@
 <template>
-  <div class="index">
-      <el-upload
-        class="upload-picture"
-        action="none"
-        :on-change="fileChange"
-        :auto-upload="false">
-        <el-button slot="trigger" type="primary">上传文件</el-button>
-<!--        <el-button type="success" @click="submitUpload">点击上传</el-button>-->
-        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
+  <div>
+    <canvas
+      id="myCanvas"
+      width="1200"
+      height="800"
+      style="display: block;"
+    ></canvas>
+    <el-button @click="qg">切割图片</el-button>
   </div>
 </template>
 
 <script>
-import { postPic } from "../../api/apiRequest";
-
 export default {
   name: "index",
-  data() {
-    return {
-      fileList:[]     // 文件列表
-    };
-  },
-  methods: {
-    // 上传图片
-    fileChange(data) {
-      console.log(data)
+  methods:{
+    qg() {
+      let image = new Image();
+      image.src = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+      let canvas = document.getElementById("myCanvas");   // 查找特定元素
+      let context = canvas.getContext("2d");
+      let boxWidth, boxHeight;
+      let rows = 10,
+        columns = 20,
+        counter = 0;
 
-      let file = data.raw;
-      console.log(file)
-      // 请求体编码,使用form-data库
-      let formData = new FormData()
+      image.onload = function () {
+        boxWidth = image.width / columns;
+        boxHeight = image.height / rows;
+        requestAnimationFrame(animate);
+      };
 
-      formData.append("img", file)  // 构造formData数据
-
-      postPic(formData).then(res => {           // 上传formData数据,formData作为实参
-        console.log(res)
-      })
-        .catch(function (error) {
-        if (error.response) {
-          // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
+      function animate() {
+        let x = Math.floor(Math.random() * columns);
+        let y = Math.floor(Math.random() * rows);
+        context.drawImage(
+          image,
+          x * boxWidth, // 横坐标起始位置
+          y * boxHeight, // 纵坐标起始位置
+          boxWidth, // 图像的宽
+          boxHeight, // 图像的高
+          x * boxWidth, // 在画布上放置图像的 x 坐标位置
+          y * boxHeight, // 在画布上放置图像的 y 坐标位置
+          boxWidth, // 要使用的图像的宽度
+          boxHeight // 要使用的图像的高度
+        );
+        counter++;
+        if (counter > columns * rows * 0.9) {
+          context.drawImage(image, 0, 0);
         } else {
-          // 发送请求时出了点问题
-          console.log('Error', error.message);
+          requestAnimationFrame(animate);
         }
-        console.log(error.config);
-      });
+      }
     },
   }
 }

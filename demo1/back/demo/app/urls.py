@@ -5,7 +5,7 @@ from . import views
 # 使用router来注册viewset，让urlconf自动生成
 router = DefaultRouter()        # 可以处理视图的路由器
 router.register('pic', views.PicViewSet)    # 向路由器中注册视图集
-router.register('books', views.BooksViewSet)
+router.register('cd_pic', views.CdPicViewSet)    # 注册变化检测图片
 
 
 urlpatterns = [

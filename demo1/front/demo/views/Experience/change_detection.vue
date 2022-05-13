@@ -2,20 +2,9 @@
   <div class="index">
     <el-container>
       <!-- 表头   -->
-      <el-header>Header</el-header>
       <el-container>
         <!-- 侧边栏-->
         <el-aside width="300px">
-          <el-row>
-            <el-col>
-              <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-                <el-menu-item index="1">目标提取</el-menu-item>
-                <el-menu-item index="2">地物分类</el-menu-item>
-                <el-menu-item index="3">变化检测</el-menu-item>
-              </el-menu>
-            </el-col>
-          </el-row>
-
           <el-row>
             <el-col>
               示例数据
@@ -31,7 +20,7 @@
 
         <!--  中间容器  -->
         <el-main>
-           <el-image :src="src" style="width: 280px;height: 100px"></el-image>
+          <el-image :src="src" style="width:auto;height: auto"></el-image>
         </el-main>
       </el-container>
     </el-container>
@@ -44,7 +33,7 @@ export default {
   data() {
     return {
       activeIndex: '1',
-       src: 'http://127.0.0.1:8000/media/pictures/82d8c7c349.png'
+      src: 'http://127.0.0.1:8000/media/pictures/82d8c7c349.png'
     };
   },
   methods: {

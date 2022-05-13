@@ -1,12 +1,13 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
+  <div>
+    <h1>地物分类</h1>
   </div>
+
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: "object_classification"
 }
 </script>
 
