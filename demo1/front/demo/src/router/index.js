@@ -53,5 +53,10 @@ export default new Router({
       name:'operation',
       component:() => import('../../views/change_detection/operation')
     },    // 图片显示及后续操作
+    {
+      path:'/test',
+      name:'test',
+      component:() => import('../../views/test/root')
+    },   //测试
   ]
 })

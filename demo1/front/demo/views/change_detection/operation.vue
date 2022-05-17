@@ -1,28 +1,53 @@
 <template>
-  <div class="operation">
+  <div class="current-page">
     <el-container>
-      <el-header>Header</el-header>
+      <el-header>相关操作界面</el-header>
       <el-container>
-        <el-aside width="200px">
-          <h1>变化检测</h1>
-          <el-button @click="getpic">获取图片</el-button>
-          <ul>
-            <li v-for="(img,index) in pic" :key="index" style="display: block">
-              {{ img.id }}: {{ img.img }}
-            </li>
-          </ul>
-        </el-aside>
-        <el-main>
+        <!-- 折叠面板-->
+        <pack-up>
           <div>
+            <!-- 表格-->
+            <el-table
+              :data="tableData"
+              style="width:auto">
+              <el-table-column
+                label="ID"
+                prop="id">
+              </el-table-column>
+
+              <el-table-column
+                label="IMG"
+                prop="img">
+              </el-table-column>
+
+              <el-table-column
+                align="right">
+                <!-- 通过设置 Scoped slot 来自定义表头 -->
+                <template slot="header">操作
+                </template>
+                <template v-slot="scope">
+                  <!-- scope.row.img 获取图片链接数据-->
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="loading(scope.row.img)">加载
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-button @click="getpic">获取数据</el-button>
+          </div>
+        </pack-up>
+        <!--界面内容 -->
+        <div class="right">
+          <el-main>
             <canvas
               id="myCanvas"
-              width="800"
-              height="600"
-              style="display: block;width: 100%;height: auto;"
+              width="800px"
+              height="600px"
             ></canvas>
-            <el-button @click="qg">切割图片</el-button>
-          </div>
-        </el-main>
+          </el-main>
+        </div>
       </el-container>
     </el-container>
   </div>
@@ -31,23 +56,26 @@
 <script>
 
 import {getPic} from "../../api/apiRequest";
-
+import packUp from "./packUp";
 export default {
   name: "operation",
-  data(){
-    return{
-         pic:[]
+  components:{ packUp },
+  data() {
+    return {
+      tableData: [],    // 列表显示的数据
     }
   },
-  methods:{
-    getpic(){
-      getPic().then(res =>{
-        this.pic = res.data
+  mounted() {},
+  methods: {
+    getpic() {
+      getPic().then(res => {
+        this.tableData = res.data
       })
-    },
-    qg() {
+    },    // 获取图片
+    loading(img) {
       let image = new Image();
-      image.src = "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg";
+      image.src = img;
+      // console.log(image.src)      // 查看是否读取到图片链接
       let canvas = document.getElementById("myCanvas");   // 查找特定元素
       let context = canvas.getContext("2d");
       let boxWidth, boxHeight;
@@ -60,7 +88,6 @@ export default {
         boxHeight = image.height / rows;
         requestAnimationFrame(animate);
       };
-
       function animate() {
         let x = Math.floor(Math.random() * columns);
         let y = Math.floor(Math.random() * rows);
@@ -82,43 +109,45 @@ export default {
           requestAnimationFrame(animate);
         }
       }
-    },
-  }
+    },    // 加载图片
+  },
 }
 </script>
 
 <style>
- .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
+.current-page{
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.left{
+  width: 500px;
+}
+.right{
+  flex: 1;
+}
 
-  .el-aside {
-    background-color: #333333;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
+.el-header {
+  height: 40px;
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
 
-  .el-main {
-    background-color: #333333;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
+.el-main {
+  margin: 0;
+  padding: 0;
+  background-color: #333333;
+  color: #333;
+  text-align: center;
+}
 
-  body > .el-container {
-    margin-bottom: 40px;
-  }
+canvas {
+  display: block;
+  background: #333333;
+  width: 100%;
+  height: auto;
+}
 
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
-
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
 </style>
