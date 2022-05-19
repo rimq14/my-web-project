@@ -58,5 +58,15 @@ export default new Router({
       name:'test',
       component:() => import('../../views/test/root')
     },   //测试
+    {
+      path:'/chaifen',
+      name:'chaifen',
+      component:() => import('../../views/test/chaifen')
+    },
+    {
+      path:'/kuangxuan',
+      name:'kuangxuan',
+      component:() => import('../../views/test/kuangxuan')
+    }
   ]
 })
