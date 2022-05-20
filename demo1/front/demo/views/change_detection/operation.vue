@@ -76,10 +76,10 @@ export default {
       let image = new Image();
       image.src = img;
       // console.log(image.src)      // 查看是否读取到图片链接
-      let canvas = document.getElementById("myCanvas");   // 查找特定元素
-      let context = canvas.getContext("2d");
+      var content = document.getElementById("myCanvas").getContext("2d");   // 查找特定元素
+
       let boxWidth, boxHeight;
-      let rows = 10,
+      let rows = 20,
         columns = 20,
         counter = 0;
 
@@ -88,10 +88,11 @@ export default {
         boxHeight = image.height / rows;
         requestAnimationFrame(animate);
       };
+
       function animate() {
         let x = Math.floor(Math.random() * columns);
         let y = Math.floor(Math.random() * rows);
-        context.drawImage(
+        content.drawImage(
           image,
           x * boxWidth, // 横坐标起始位置
           y * boxHeight, // 纵坐标起始位置
@@ -104,7 +105,7 @@ export default {
         );
         counter++;
         if (counter > columns * rows * 0.9) {
-          context.drawImage(image, 0, 0);
+          content.drawImage(image, 0, 0);
         } else {
           requestAnimationFrame(animate);
         }
@@ -121,7 +122,7 @@ export default {
   display: flex;
 }
 .left{
-  width: 500px;
+  width: auto;
 }
 .right{
   flex: 1;
@@ -146,8 +147,8 @@ export default {
 canvas {
   display: block;
   background: #333333;
+  height: 100%;
   width: 100%;
-  height: auto;
 }
 
 </style>
