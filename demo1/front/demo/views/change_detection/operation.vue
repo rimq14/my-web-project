@@ -30,12 +30,11 @@
                   <el-button
                     size="mini"
                     type="text"
-                    @click="loading(scope.row.img)">加载
+                    @click="loadImg(scope.row.img)">加载
                   </el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <el-button @click="getpic">获取数据</el-button>
           </div>
         </pack-up>
         <!--界面内容 -->
@@ -43,8 +42,9 @@
           <el-main>
             <canvas
               id="myCanvas"
-              width="800px"
-              height="600px"
+              :width="canvasWidth"
+              :height="canvasHeight"
+              :style="'width:'+canvasWidth/2+'px;height:'+canvasHeight/2+'px;'"
             ></canvas>
           </el-main>
         </div>
@@ -52,6 +52,7 @@
     </el-container>
   </div>
 </template>
+
 
 <script>
 
@@ -62,55 +63,90 @@ export default {
   components:{ packUp },
   data() {
     return {
+      canvasWidth: 1900, // 画布大小
+      canvasHeight:1200,
       tableData: [],    // 列表显示的数据
+      myCanvas: null,
+      ctx: null,
+      imgObject: [],
+      imgX: 0, // 图片在画布中渲染的起点x坐标
+      imgY: 0,
+      imgScale: 0.1, // 图片的缩放大小
     }
   },
-  mounted() {},
+  mounted() {
+    this.loadinfo();   // 获取图片信息
+    this.myCanvas = document.getElementById("myCanvas");
+    this.ctx = this.myCanvas.getContext('2d');
+    this.canvasEventsInit();
+  },
   methods: {
-    getpic() {
+    loadinfo() {
       getPic().then(res => {
         this.tableData = res.data
       })
     },    // 获取图片
-    loading(img) {
-      let image = new Image();
-      image.src = img;
-      // console.log(image.src)      // 查看是否读取到图片链接
-      var content = document.getElementById("myCanvas").getContext("2d");   // 查找特定元素
+    loadImg(img) {
+        var _this = this;
+        var image = new Image();
+        image.src = img
 
-      let boxWidth, boxHeight;
-      let rows = 20,
-        columns = 20,
-        counter = 0;
+        image.onload = function () {
+          _this.imgObject = image;
+          _this.drawImage(image);   // 加载图片
+          // window.requestAnimationFrame(animate);    // 告诉浏览器你希望执行一个动画
+        };
+      },    // 加载
+    drawImage(image) {
+        var _this = this;
+        _this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);   // 清除拖动的图片轨迹
+          _this.ctx.drawImage(
+            image, //规定要使用的图片
+            _this.imgX + image.x * _this.imgScale,  // 在画布上放置图像的 x坐标位置
+            _this.imgY+ image.y * _this.imgScale,   // 在画布上放置图像的 y坐标位置。
+            image.width*_this.imgScale,   // 要使用的图像的宽度
+            image.height*_this.imgScale   //要使用的图像的高度
+          );
+        },    // 图片渲染
+    canvasEventsInit() {
+        var _this = this;
+        var canvas = _this.myCanvas;
 
-      image.onload = function () {
-        boxWidth = image.width / columns;
-        boxHeight = image.height / rows;
-        requestAnimationFrame(animate);
-      };
+        canvas.onmousedown = function (event) {
+          var imgx = _this.imgX;
+          var imgy = _this.imgY;
+          var pos = {x:event.clientX, y:event.clientY};  //坐标转换，将窗口坐标转换成canvas的坐标
+          canvas.onmousemove = function (evt) {  //移动
+            canvas.style.cursor = 'move';
 
-      function animate() {
-        let x = Math.floor(Math.random() * columns);
-        let y = Math.floor(Math.random() * rows);
-        content.drawImage(
-          image,
-          x * boxWidth, // 横坐标起始位置
-          y * boxHeight, // 纵坐标起始位置
-          boxWidth, // 图像的宽
-          boxHeight, // 图像的高
-          x * boxWidth, // 在画布上放置图像的 x 坐标位置
-          y * boxHeight, // 在画布上放置图像的 y 坐标位置
-          boxWidth, // 要使用的图像的宽度
-          boxHeight // 要使用的图像的高度
-        );
-        counter++;
-        if (counter > columns * rows * 0.9) {
-          content.drawImage(image, 0, 0);
-        } else {
-          requestAnimationFrame(animate);
-        }
-      }
-    },    // 加载图片
+            var x = (evt.clientX - pos.x) * 2 + imgx;
+            var y = (evt.clientY - pos.y) * 2 + imgy;
+            _this.imgX  = x;
+            _this.imgY  = y;
+            _this.drawImage(_this.imgObject);  //重新绘制图片
+          };
+
+          canvas.onmouseup = function () {
+            canvas.onmousemove = null;
+            canvas.onmouseup = null;
+            canvas.style.cursor = 'default';
+          };
+        };
+
+        canvas.onmousewheel = canvas.onwheel = function (event) {    //滚轮放大缩小
+          var wheelDelta = event.wheelDelta ? event.wheelDelta : (event.deltalY * (-40));  //获取当前鼠标的滚动情况
+          if (wheelDelta > 0) {
+              _this.imgScale *= 1.1;
+          } else {
+              if(_this.imgScale > 0.1) {
+                 _this.imgScale *= 0.9;
+              }
+          }
+          _this.drawImage(_this.imgObject);   //重新绘制图片
+          event.preventDefault  && event.preventDefault();
+          return false;
+        };
+      },    // 为画布上鼠标的拖动和缩放注册事件
   },
 }
 </script>
@@ -127,7 +163,6 @@ export default {
 .right{
   flex: 1;
 }
-
 .el-header {
   height: 40px;
   background-color: #B3C0D1;
@@ -135,20 +170,12 @@ export default {
   text-align: center;
   line-height: 60px;
 }
-
 .el-main {
-  margin: 0;
-  padding: 0;
   background-color: #333333;
-  color: #333;
-  text-align: center;
 }
-
 canvas {
   display: block;
-  background: #333333;
-  height: 100%;
-  width: 100%;
+  background: green;
 }
 
 </style>

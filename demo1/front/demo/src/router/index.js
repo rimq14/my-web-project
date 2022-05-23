@@ -56,7 +56,7 @@ export default new Router({
     {
       path:'/test',
       name:'test',
-      component:() => import('../../views/test/root')
+      component:() => import('../../views/test/ronhe2')
     },   //测试
     {
       path:'/chaifen',
