@@ -52,7 +52,7 @@ export default {
   }
   .curr-contents .pack-ups{
     height: auto;
-    background: #E9EEF3;
+    background: #333333;
     position: absolute;
     right: 0;
     top: 0;

@@ -12,12 +12,15 @@
   "dependencies": {
     "axios": "^0.27.2",
     "element-ui": "^2.15.8",
+    "pngjs": "^6.0.0",
+    "pngjs2": "^2.0.0",
     "progressive-image": "^1.2.0",
     "vue": "^2.5.2",
     "vue-devtools": "^5.1.4",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
+    "@types/pngjs2": "^2.0.30",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",

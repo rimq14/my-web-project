@@ -1,7 +1,6 @@
 // 对后端进行请求
 import axiosInstance from './index'
-import {config} from "shelljs";
-import {data} from "autoprefixer";
+
 
 
 const axios = axiosInstance
