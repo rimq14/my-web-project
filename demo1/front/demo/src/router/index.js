@@ -63,10 +63,5 @@ export default new Router({
       name:'chaifen',
       component:() => import('../../views/test/chaifen')
     },
-    {
-      path:'/kuangxuan',
-      name:'kuangxuan',
-      component:() => import('../../views/test/kuangxuan')
-    }
   ]
 })
