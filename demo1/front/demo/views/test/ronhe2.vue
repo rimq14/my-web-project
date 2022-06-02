@@ -26,6 +26,7 @@
         <div class="btn">
             <el-button icon="el-icon-search" size="mini" @click="rectImage"></el-button>
             <el-button icon="el-icon-close" size="mini" @click="rectCancel"></el-button>
+            <el-button @click="dealData">处理</el-button>
         </div>
     </div>
 </template>
@@ -49,6 +50,8 @@ export default {
             dealflag: false,
             rectangles: [],  // 框选的参数
             pos: {},// 存储点击鼠标坐标
+            ratex: 0,
+            ratey: 0,
         }
     },
     mounted() {
@@ -96,27 +99,30 @@ export default {
         },
         drawRect() {
             var _this = this;
+            var size = { width: _this.imgObject.width * _this.imgScale, height: _this.imgObject.height * _this.imgScale };      // 图片的尺寸
+            var rateX = (_this.pos.x - _this.imgX) / size.width, rateY = (_this.pos.y - _this.imgY) / size.height;      // 鼠标位置比例
+            
             var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
             _this.ctx.beginPath();
             _this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);
             _this.drawImage(_this.imgObject);       //重新绘制图片
             _this.ctx.strokeStyle = '#00ff00';      // 设置线条颜色，必须放在绘制之前
             _this.ctx.lineWidth = 2;        // 线宽设置，必须放在绘制之前-->
-            _this.ctx.strokeRect(rect.x, rect.y, rect.width, rect.height); // 矩形绘制
-
-            if (_this.dealflag) {
-                var imageData = _this.ctx.getImageData(rect.x, rect.y, rect.width, rect.height);     // 获取框选数据
-                _this.layer2.width = rect.width, _this.layer2.height = rect.height;
-                _this.ctx2.putImageData(imageData, 0, 0);
-                console.log(_this.layer2.toDataURL("image/png", 1.0));
-            }
+            _this.ctx.strokeRect(_this.imgX + rateX * size.width, _this.imgY + rateY * size.height, rect.width, rect.height); // 矩形绘制
         }, // 绘制矩形
+
         rectImage() {
             var _this = this;
             _this.rectflag = true;
         },  // 框选图片
         dealData() {
             var _this = this; _this.dealflag = true;
+            var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
+            var imageData = _this.ctx.getImageData(rect.x, rect.y, rect.width, rect.height);     // 获取框选数据
+            _this.layer2.width = rect.width, _this.layer2.height = rect.height;
+            _this.ctx2.putImageData(imageData, 0, 0);
+            console.log(_this.layer2.toDataURL("image/png", 1.0));
+
             // _this.ctx.putImageData(imageData, _this.pos.x, _this.pos.y);
         },    // 将图像数据重画至Canvas画布中
         rectCancel() {
@@ -127,13 +133,13 @@ export default {
             canvas.onmousedown = function (e) {
                 var imgx = _this.imgX, imgy = _this.imgY;
                 var pos = {
-                    x: e.pageX - canvas.offsetLeft,
-                    y: e.offsetY - canvas.offsetTop
+                    x: e.pageX,
+                    y: e.pageY
                 }; //鼠标点击坐标
                 _this.pos = pos;
 
                 canvas.onmousemove = function (e) {
-                    var movenumber = { x: (e.pageX - canvas.offsetLeft - pos.x) * 2, y: (e.offsetY - canvas.offsetTop - pos.y) * 2 };
+                    var movenumber = { x: (e.pageX - pos.x) * 2, y: (e.pageY - pos.y) * 2 };
                     if (_this.rectflag) {
                         if (movenumber.x && movenumber.y) {
                             var x = pos.x, y = pos.y, width = movenumber.x, height = movenumber.y;
