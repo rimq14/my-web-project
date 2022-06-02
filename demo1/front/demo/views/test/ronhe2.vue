@@ -1,14 +1,12 @@
 <template>
-    <div class="root" style="width: 100%;height: 100%;">
-        <div class="mycanvas">
-            <canvas id="layer" width=1024 height=955 style="width: 100%;height: 100%;"></canvas>
+    <div class="root">
+        <div class="mycanvas" style="width=100%;height: 100%;position: absolute;">
+            <canvas id="layer" width=1024 height=955 ></canvas>
         </div>
         <div class="table">
             <!-- 表格-->
             <el-table :data="extraimg" style="width:auto">
-                <el-table-column label="ID" prop="id">
-                </el-table-column>
-
+                
                 <el-table-column label="IMG" prop="img">
                 </el-table-column>
 
@@ -23,9 +21,9 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="btn">
+        <div class="btn" style="position:absolute">
             <el-button icon="el-icon-search" size="mini" @click="rectImage"></el-button>
-            <el-button icon="el-icon-close" size="mini" @click="rectCancel"></el-button>
+            <el-button @click="rectCancel">删除</el-button>
             <el-button @click="dealData">处理</el-button>
         </div>
     </div>
@@ -46,7 +44,9 @@ export default {
             imgX: 0,
             imgY: 0, // 图片在画布中渲染的起点坐标
             imgScale: 0.1, // 图片的缩放大小
+            rectScale: 1,    // 选框的比例
             rectflag: false, // 框选标志位
+            dragflag:true,
             dealflag: false,
             rectangles: [],  // 框选的参数
             pos: {},// 存储点击鼠标坐标
@@ -99,18 +99,14 @@ export default {
         },
         drawRect() {
             var _this = this;
-            var size = { width: _this.imgObject.width * _this.imgScale, height: _this.imgObject.height * _this.imgScale };      // 图片的尺寸
-            var rateX = (_this.pos.x - _this.imgX) / size.width, rateY = (_this.pos.y - _this.imgY) / size.height;      // 鼠标位置比例
-            
-            var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
-            _this.ctx.beginPath();
-            _this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);
-            _this.drawImage(_this.imgObject);       //重新绘制图片
-            _this.ctx.strokeStyle = '#00ff00';      // 设置线条颜色，必须放在绘制之前
-            _this.ctx.lineWidth = 2;        // 线宽设置，必须放在绘制之前-->
-            _this.ctx.strokeRect(_this.imgX + rateX * size.width, _this.imgY + rateY * size.height, rect.width, rect.height); // 矩形绘制
+                var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
+                _this.ctx.beginPath();
+                _this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);       // 清除前一元素
+                _this.drawImage(_this.imgObject);       //重新绘制图片
+                _this.ctx.strokeStyle = '#00ff00';      // 设置线条颜色，必须放在绘制之前
+                _this.ctx.lineWidth = 2;        // 线宽设置，必须放在绘制之前-->
+                _this.ctx.strokeRect(rect.x* _this.rectScale, rect.y* _this.rectScale, rect.width * _this.rectScale, rect.height * _this.rectScale); // 矩形绘制
         }, // 绘制矩形
-
         rectImage() {
             var _this = this;
             _this.rectflag = true;
@@ -127,19 +123,19 @@ export default {
         },    // 将图像数据重画至Canvas画布中
         rectCancel() {
             var _this = this;
+            for (var i = 0; i < _this.rectangles.length; i++) {
+                delete _this.rectangles[i];     // 清除矩形列表元素
+            }
+            _this.drawImage(_this.imgObject);       //重新绘制图片
         }, // 取消框选的区域
         canvasEventsInit() {
             var _this = this, canvas = _this.layer;
             canvas.onmousedown = function (e) {
                 var imgx = _this.imgX, imgy = _this.imgY;
-                var pos = {
-                    x: e.pageX,
-                    y: e.pageY
-                }; //鼠标点击坐标
+                var pos = {x: e.clientX -canvas.offsetLeft,y: e.clientY-canvas.offsetTop }; //鼠标点击坐标
                 _this.pos = pos;
-
                 canvas.onmousemove = function (e) {
-                    var movenumber = { x: (e.pageX - pos.x) * 2, y: (e.pageY - pos.y) * 2 };
+                    var movenumber = { x: (e.clientX -canvas.offsetLeft- pos.x) * 2, y: (e.clientY -canvas.offsetTop- pos.y) * 2 };
                     if (_this.rectflag) {
                         if (movenumber.x && movenumber.y) {
                             var x = pos.x, y = pos.y, width = movenumber.x, height = movenumber.y;
@@ -152,6 +148,7 @@ export default {
                         var x = movenumber.x + imgx, y = movenumber.y + imgy; // 图像渲染的起始点坐标
                         _this.imgX = x, _this.imgY = y; // 渲染图象的位置
                         _this.drawImage(_this.imgObject); //重新绘制图片
+                        _this.drawRect();
                     }
                 };
                 canvas.onmouseup = function (e) {
@@ -167,13 +164,16 @@ export default {
                 var wheelDelta = event.wheelDelta ? event.wheelDelta : (event.deltalY * (-40)); //获取当前鼠标的滚动情况
                 if (wheelDelta > 0) {
                     _this.imgScale *= 1.1;
+                    _this.rectScale *= 1.1;
                 } else {
                     if (_this.imgScale > 0.1) {
                         _this.imgScale *= 0.9;
+                        _this.rectScale *= 0.9;
                     }
                 }
                 event.preventDefault && event.preventDefault(); // 阻止页面的点击菜单栏
                 _this.drawImage(_this.imgObject); //重新绘制图片
+                _this.drawRect();       // 重新绘制矩形
                 return false;
             };
         },
