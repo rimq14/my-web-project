@@ -1,12 +1,12 @@
 <template>
     <div class="root">
         <div class="mycanvas" style="width=100%;height: 100%;position: absolute;">
-            <canvas id="layer" width=1024 height=955 ></canvas>
+            <canvas id="layer" width=1024 height=955></canvas>
         </div>
         <div class="table">
             <!-- 表格-->
-            <el-table :data="extraimg" style="width:auto">
-                
+            <el-table :data="extraimg" style="width:100%;position: absolute;">
+
                 <el-table-column label="IMG" prop="img">
                 </el-table-column>
 
@@ -46,12 +46,10 @@ export default {
             imgScale: 0.1, // 图片的缩放大小
             rectScale: 1,    // 选框的比例
             rectflag: false, // 框选标志位
-            dragflag:true,
             dealflag: false,
             rectangles: [],  // 框选的参数
             pos: {},// 存储点击鼠标坐标
-            ratex: 0,
-            ratey: 0,
+            rate: {},    // 框选的位置在图片的比例
         }
     },
     mounted() {
@@ -99,13 +97,13 @@ export default {
         },
         drawRect() {
             var _this = this;
-                var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
-                _this.ctx.beginPath();
-                _this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);       // 清除前一元素
-                _this.drawImage(_this.imgObject);       //重新绘制图片
-                _this.ctx.strokeStyle = '#00ff00';      // 设置线条颜色，必须放在绘制之前
-                _this.ctx.lineWidth = 2;        // 线宽设置，必须放在绘制之前-->
-                _this.ctx.strokeRect(rect.x* _this.rectScale, rect.y* _this.rectScale, rect.width * _this.rectScale, rect.height * _this.rectScale); // 矩形绘制
+            var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
+            _this.ctx.beginPath();
+            _this.ctx.clearRect(rect.x, rect.y, rect.width, rect.height);       // 清除前一元素
+            _this.drawImage(_this.imgObject);       //重新绘制图片
+            _this.ctx.strokeStyle = '#00ff00';      // 设置线条颜色，必须放在绘制之前
+            _this.ctx.lineWidth = 2;        // 线宽设置，必须放在绘制之前-->
+            _this.ctx.strokeRect(rect.x * _this.rectScale, rect.y * _this.rectScale, rect.width * _this.rectScale, rect.height * _this.rectScale); // 矩形绘制
         }, // 绘制矩形
         rectImage() {
             var _this = this;
@@ -114,8 +112,8 @@ export default {
         dealData() {
             var _this = this; _this.dealflag = true;
             var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
-            var imageData = _this.ctx.getImageData(rect.x, rect.y, rect.width, rect.height);     // 获取框选数据
-            _this.layer2.width = rect.width, _this.layer2.height = rect.height;
+            var imageData = _this.ctx.getImageData(rect.x * _this.rectScale, rect.y * _this.rectScale, rect.width * _this.rectScale, rect.height * _this.rectScale);     // 获取框选数据
+            _this.layer2.width = rect.width * _this.rectScale, _this.layer2.height = rect.height * _this.rectScale;
             _this.ctx2.putImageData(imageData, 0, 0);
             console.log(_this.layer2.toDataURL("image/png", 1.0));
 
@@ -123,22 +121,22 @@ export default {
         },    // 将图像数据重画至Canvas画布中
         rectCancel() {
             var _this = this;
-            for (var i = 0; i < _this.rectangles.length; i++) {
-                delete _this.rectangles[i];     // 清除矩形列表元素
-            }
+            _this.rectangles.length = 0;
             _this.drawImage(_this.imgObject);       //重新绘制图片
         }, // 取消框选的区域
         canvasEventsInit() {
             var _this = this, canvas = _this.layer;
             canvas.onmousedown = function (e) {
                 var imgx = _this.imgX, imgy = _this.imgY;
-                var pos = {x: e.clientX -canvas.offsetLeft,y: e.clientY-canvas.offsetTop }; //鼠标点击坐标
+                var pos = { x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop }; //鼠标点击坐标
                 _this.pos = pos;
+
                 canvas.onmousemove = function (e) {
-                    var movenumber = { x: (e.clientX -canvas.offsetLeft- pos.x) * 2, y: (e.clientY -canvas.offsetTop- pos.y) * 2 };
+                    var movenumber = { x: (e.clientX - canvas.offsetLeft - pos.x) * 2, y: (e.clientY - canvas.offsetTop - pos.y) * 2 };
+                
                     if (_this.rectflag) {
                         if (movenumber.x && movenumber.y) {
-                            var x = pos.x, y = pos.y, width = movenumber.x, height = movenumber.y;
+                            var x = pos.x, y = pos.y, width = movenumber.x, height = movenumber.y;      // 选框的参数
                             var rectangle = new _this.rectar(x, y, width, height);     // 创建一个新的矩形对象
                             _this.rectangles.push(rectangle);       // 将矩形对象保存在数组中
                             _this.drawRect();       // 绘制矩形
@@ -148,7 +146,6 @@ export default {
                         var x = movenumber.x + imgx, y = movenumber.y + imgy; // 图像渲染的起始点坐标
                         _this.imgX = x, _this.imgY = y; // 渲染图象的位置
                         _this.drawImage(_this.imgObject); //重新绘制图片
-                        _this.drawRect();
                     }
                 };
                 canvas.onmouseup = function (e) {
@@ -182,4 +179,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

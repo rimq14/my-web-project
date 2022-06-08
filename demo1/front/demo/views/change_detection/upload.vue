@@ -3,14 +3,16 @@
     <el-container>
       <el-main>
         <el-empty>
-          <el-upload
-            class="upload-picture"
-            action="none"
-            :on-change="fileChange"
-            :auto-upload="false">
-            <el-button slot="trigger" type="primary">选取文件</el-button>
-              <el-button @click="toDetail">上传文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件,且不超过500kb</div>
+          <el-upload 
+            class="upload-picture" 
+            action="none" 
+            :on-change="fileChange" 
+            :auto-upload="false"
+            :limit="1"
+            >
+            <el-button slot="trigger" type="file">选取文件</el-button>
+            <el-button @click="toDetail">上传文件</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件</div>
           </el-upload>
         </el-empty>
       </el-main>
@@ -19,7 +21,7 @@
 </template>
 
 <script>
-import {postPic} from "../../api/apiRequest";
+import { postPic } from "../../api/apiRequest";
 
 export default {
   name: "index",
@@ -38,7 +40,7 @@ export default {
       // 请求体编码,使用form-data库
       let formData = new FormData()
 
-      formData.append("img", file)  // 构造formData数据
+      formData.append("image_url", file)  // 构造formData数据
 
       postPic(formData).then(res => {    // 上传formData数据,formData作为实参
         console.log(res)
@@ -66,5 +68,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

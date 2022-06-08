@@ -8,9 +8,6 @@
           <div>
             <!-- 表格-->
             <el-table :data="tableData" style="width:auto">
-              <el-table-column label="ID" prop="id">
-              </el-table-column>
-
               <el-table-column label="IMG" prop="img">
               </el-table-column>
 
