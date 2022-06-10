@@ -10,7 +10,7 @@ def picture_directory_path(pic_id, filename):
 
 # 上传用于示例的图片
 class Pic(models.Model):
-    image_url = models.FileField(null=True, upload_to=picture_directory_path, verbose_name='示例图片')
+    image_url = models.ImageField(null=True, upload_to=picture_directory_path, verbose_name='示例图片')
 
     # 表信息声明
     class Meta:
@@ -20,7 +20,7 @@ class Pic(models.Model):
 
 # 上传进行功能操作的图片
 class Cd_pic(models.Model):
-    img = models.FileField(upload_to='change_detection/pic_path', verbose_name='用于变化检测的图片')  # 图片的上传
+    img = models.ImageField(upload_to='change_detection/pic_path', verbose_name='用于变化检测的图片')  # 图片的上传
 
     class Meta:
         db_table = 'cd_img'

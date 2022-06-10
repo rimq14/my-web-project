@@ -21,5 +21,5 @@ from .settings import MEDIA_ROOT
 urlpatterns = [
     # path('admin/', admin.site.urls),
     re_path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    path('api/', include('app.urls')),
+    path(r'api/', include('app.urls')),
 ]

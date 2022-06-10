@@ -22,4 +22,6 @@ export const postPic = (params) => {
   })
 }
 
+// 向后端发送请求
+export const 
 
