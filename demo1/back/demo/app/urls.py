@@ -7,6 +7,7 @@ from . import views
 router = DefaultRouter()        # 可以处理视图的路由器
 router.register(r'pic',views.PicViewSet)
 router.register(r'cd_pic', views.CdPicViewSet)    # 注册变化检测图片
+router.register(r'split_images', views.SplitImagesViewSet)
 
 
 urlpatterns = [

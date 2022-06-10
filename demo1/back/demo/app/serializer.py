@@ -1,15 +1,20 @@
 from rest_framework import serializers
-from .models import Pic, Cd_pic
+from .models import Pic, Cd_pic, Split_image
 
 # 在下面创建序列化类
 class PicSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pic               # model指明该序列化器处理的数据字段从模型类Pic获取
-        fields = ('image_url',)       # fields 指明该序列化器包含模型类中的哪些字段，__all__指明包含所有字段
+        fields = "__all__"       # fields 指明该序列化器包含模型类中的哪些字段，__all__指明包含所有字段
 
 
 # 变化检测图片
 class CdPicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cd_pic
-        fields = '__all__'
+        fields = "__all__"
+
+class SplitImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Split_image
+        fields = "__all__"
