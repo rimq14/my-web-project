@@ -18,12 +18,14 @@ class PicViewSet(ModelViewSet):
     """
     允许用户查看或编辑的api路径
     """
-    queryset = Pic.objects.all().order_by("-id")  # queryset 数据库中查询出来的结果集合,并倒序排序
+    queryset = Pic.objects.all().order_by("id")  # queryset 数据库中查询出来的结果集合,并倒序排序
     serializer_class = PicSerializer
 
-    @action(methods=['get'], detail=False)
+    # 前端传递图片id，后端对图片进行拆分
+    @action(methods=['post'], detail=False)
     def deal(self, request):
-        data = Pic.objects.last()       # 获取数据库最后一条数据
+        name = request.POST['name']         # 前端请求的图片
+        data = Pic.objects.get(name=name)       # 获取数据库指定名称数据
         image = data.image_url
         a = Image.open(image)       # 打开图像
         pic_path = 'E:/web-development/web-project/demo1/back/demo/media/change_detection/pic_path/' + 'test.{}'.format(a.format.lower())  # 需要拆分图片存放文件夹
@@ -54,10 +56,10 @@ class PicViewSet(ModelViewSet):
 
         # 将拆分后的图片保存至数据库
         for filename in os.listdir(r'E:\web-development\web-project\demo1\back\demo\media\split_images'):
-            s1 = Split_image(image_url="/split_images/{}".format(filename))
-            s1.save()
+            # Pic_obj = Pic.objects.filter(name=name)
+            images = Split_image.objects.create(image_url="/split_images/{}".format(filename),name=name)
 
-        return Response("拆分成功", status=status.HTTP_200_OK)
+        return Response("{}拆分成功".format(data.name), status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=False)
     def fetch(self, request):

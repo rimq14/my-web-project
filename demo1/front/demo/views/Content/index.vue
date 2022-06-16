@@ -26,7 +26,7 @@
         <button class="pro3" style="display:inline-block; font-size: 14px;font-weight:bolder;">新建处理分析项目</button>
       </div>
       <div class="tools">
-        <router-link :to="{ path: '/change_detection' }" class="btn btn-primary" role="button" target="_blank">
+        <router-link :to="{ path: '/change_detection/operation' }" class="btn btn-primary" role="button" target="_blank">
         <div class="tool">
           <img :src="tool1" class="tool_pic" />
           <h4 style="font-size:15px;font-weight:500">变化检测</h4>

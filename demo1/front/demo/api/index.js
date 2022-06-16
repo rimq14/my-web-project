@@ -6,7 +6,7 @@ import Axios from 'axios';
 // 自定义配置新建一个axios实例
 const axiosInstance =Axios.create({
   baseURL:'http://127.0.0.1:8000',  // 请求的域名，基本地址
-  timeout:1000,    // 请求超时时长，单位毫秒
+  timeout:100000,    // 请求超时时长，单位毫秒
   url:'/api/pic/',   //请求的路径
   method: 'post,get,put,patch,delete',
   // withCredentials: true,    // 表示跨域请求时是否需要使用凭证，默认值为false

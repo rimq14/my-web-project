@@ -56,22 +56,21 @@ export default {
         this.loadinfo();
         this.layer = document.getElementById("layer");      // 用于图片的一系列操作
         this.ctx = this.layer.getContext('2d');
-        this.layer2 = document.createElement("canvas");     // 用于
-        this.ctx2 = this.layer2.getContext('2d');
         this.canvasEventsInit();
     },
     methods: {
         loadinfo() {
             getPic().then(res => {
                 this.extraimg = res.data
-            })
+            });
+            
         },
         loadImg(img) {
             var _this = this;
             _this.ctx.clearRect(0, 0, 2400, 1400);  // 初始化画布
             var image = new Image();
             image.src = img;
-            image.crossOrigin = "";    // 解决getImageData()函数跨域
+            // image.crossOrigin = "";    // 解决getImageData()函数跨域
             image.onload = function () {
                 _this.imgObject = image;
                 _this.drawImage(image); // 加载图片
@@ -111,14 +110,8 @@ export default {
         },  // 框选图片
         dealData() {
             var _this = this; _this.dealflag = true;
-            var rect = _this.rectangles[_this.rectangles.length - 1];   // 取数组最后一个元素
-            var imageData = _this.ctx.getImageData(rect.x * _this.rectScale, rect.y * _this.rectScale, rect.width * _this.rectScale, rect.height * _this.rectScale);     // 获取框选数据
-            _this.layer2.width = rect.width * _this.rectScale, _this.layer2.height = rect.height * _this.rectScale;
-            _this.ctx2.putImageData(imageData, 0, 0);
-            console.log(_this.layer2.toDataURL("image/png", 1.0));
 
-            // _this.ctx.putImageData(imageData, _this.pos.x, _this.pos.y);
-        },    // 将图像数据重画至Canvas画布中
+        },    // 将框选的坐标参数传送至后端，并获取后端数据进行显示
         rectCancel() {
             var _this = this;
             _this.rectangles.length = 0;

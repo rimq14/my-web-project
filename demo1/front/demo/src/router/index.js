@@ -43,11 +43,11 @@ export default new Router({
         }
       ]
     },  // 体验中心
-    {
-      path: '/change_detection',
-      name: 'upload',
-      component: () => import('../../views/change_detection/upload')
-    },  // 变化检测上传图片
+    // {
+    //   path: '/change_detection',
+    //   name: 'upload',
+    //   component: () => import('../../views/change_detection/upload')
+    // },  // 变化检测上传图片
     {
       path:'/change_detection/operation',
       name:'operation',
@@ -56,12 +56,7 @@ export default new Router({
     {
       path:'/test',
       name:'test',
-      component:() => import('../../views/test/ronhe2')
+      component:() => import('../../views/test/root')
     },   //测试
-    {
-      path:'/chaifen',
-      name:'chaifen',
-      component:() => import('../../views/test/chaifen')
-    },
   ]
 })

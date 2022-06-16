@@ -24,7 +24,6 @@ class Pic(models.Model):
 # 上传进行功能操作的图片
 class Cd_pic(models.Model):
     image_url = models.ImageField(upload_to='change_detection/pic_path', verbose_name="图片")  # 图片的上传
-
     class Meta:
         db_table = 'change_detection_images'
         verbose_name = '变化检测的图片'
@@ -32,7 +31,8 @@ class Cd_pic(models.Model):
 
 class Split_image(models.Model):
     image_url = models.ImageField(upload_to='split_images', verbose_name="图片")
-
+    # name = models.ForeignKey(to='Pic', on_delete=models.CASCADE)       # 一对多外键设置
+    name = models.CharField(max_length=150,verbose_name="名称")
     class Meta:
         db_table = "split_images"
         verbose_name = "拆分后的图片块"
