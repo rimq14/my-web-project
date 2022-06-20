@@ -7,7 +7,7 @@
             <!-- 表格-->
             <el-table :data="extraimg" style="width:100%;position: absolute;">
 
-                <el-table-column label="IMG" prop="img">
+                <el-table-column label="IMG" prop="image_url">
                 </el-table-column>
 
                 <el-table-column align="right">
@@ -15,7 +15,7 @@
                     <template v-slot:header>操作</template>
                     <template v-slot="scope">
                         <!-- scope.row.img 获取图片链接数据-->
-                        <el-button size="mini" type="text" @click="loadImg(scope.row.img)">加载
+                        <el-button size="mini" type="text" @click="loadImg(scope.row.image_url)">加载
                         </el-button>
                     </template>
                 </el-table-column>
@@ -123,9 +123,10 @@ export default {
                 var imgx = _this.imgX, imgy = _this.imgY;
                 var pos = { x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop }; //鼠标点击坐标
                 _this.pos = pos;
+                console.log(pos.x,pos.y);
 
                 canvas.onmousemove = function (e) {
-                    var movenumber = { x: (e.clientX - canvas.offsetLeft - pos.x) * 2, y: (e.clientY - canvas.offsetTop - pos.y) * 2 };
+                    var movenumber = { x: (e.clientX - canvas.offsetLeft - pos.x), y: (e.clientY - canvas.offsetTop - pos.y) };
                 
                     if (_this.rectflag) {
                         if (movenumber.x && movenumber.y) {
@@ -154,16 +155,16 @@ export default {
                 var wheelDelta = event.wheelDelta ? event.wheelDelta : (event.deltalY * (-40)); //获取当前鼠标的滚动情况
                 if (wheelDelta > 0) {
                     _this.imgScale *= 1.1;
-                    _this.rectScale *= 1.1;
+                    // _this.rectScale *= 1.1;
                 } else {
                     if (_this.imgScale > 0.1) {
                         _this.imgScale *= 0.9;
-                        _this.rectScale *= 0.9;
+                        // _this.rectScale *= 0.9;
                     }
                 }
                 event.preventDefault && event.preventDefault(); // 阻止页面的点击菜单栏
                 _this.drawImage(_this.imgObject); //重新绘制图片
-                _this.drawRect();       // 重新绘制矩形
+                // _this.drawRect();       // 重新绘制矩形
                 return false;
             };
         },

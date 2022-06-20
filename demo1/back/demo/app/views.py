@@ -4,11 +4,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .serializer import *
+import json
 
 from PIL import Image
 from cv2 import cv2
 import numpy as np
-
+# import math
 import os.path
 import os
 
@@ -62,18 +63,44 @@ class PicViewSet(ModelViewSet):
         return Response("{}拆分成功".format(data.name), status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=False)
-    def fetch(self, request):
-        data = request.data.get()       # 获取请求的坐标参数
-        image_data = Pic.objects.last()       # 获取数据库最后一条数据
+    def result(self, request):
+        post_data = request.body     # 获取请求的参数
+        data = json.loads(post_data)    # json数据转换成python数据类型
+        name = data["name"]
+        image_data = Pic.objects.get(name=data["name"])       # 获取数据库指定数据
         image = image_data.image_url
+
         a = Image.open(image)   # 打开图片
         out_file_name = 'input'     # 输出图片的名称
-        im = cv2.imread(image)
-        im = im[data.y:data.y, data.x:data.x]   # 根据鼠标落下和弹起的坐标读取数据
-        save_path = r"../media/change_detection/input_pic/"
-        save_path_file = os.path.join(save_path,out_file_name+'.{}'.format(a.format.lower()))
-        cv2.imwrite(save_path_file, im)
-        return Response("框选成功",status=status.HTTP_200_OK)
+        image_path = 'E:/web-development/web-project/demo1/back/demo/media/change_detection/pic_path/' + 'test.{}'.format(a.format.lower())
+        save_path = "E:/web-development/web-project/demo1/back/demo/media/change_detection/input_pic/"
+
+        im = cv2.imread(image_path)     # 读取图片
+        (width, length, depth) = im.shape
+      
+        # 占比
+        rateX1 = data["x1"] / (length * data["scale"])
+        rateX2 = data["x2"] / (length * data["scale"])
+        rateY1 = data["y1"] / (width * data["scale"])
+        rateY2 = data["y2"] / (width * data["scale"])
+
+        mousedown = {"x":rateX1*length,"y":rateY1*width}
+        mouseup = {"x":rateX2*length,"y":rateY2*width}
+
+        cut_width = int(abs(mouseup["y"]- mousedown["y"]))
+        cut_length = int(abs(mouseup["x"] - mousedown["x"]))
+
+        pic = np.zeros((cut_width, cut_length, depth))
+        if mousedown["x"] < 0 :
+            mousedown["x"]= 0
+        if mousedown["y"] < 0 :
+            mousedown["y"] = 0
+        pic = im[int(mousedown["y"]):int(mouseup["y"]), int(mousedown["x"]):int(mouseup["x"]),]   # 根据鼠标落下和弹起的坐标读取数据
+        save_path_file = save_path + out_file_name +'.{}'.format(a.format.lower())
+        cv2.imwrite(save_path_file, pic)
+
+        return Response(data,status=status.HTTP_200_OK)
+
 
 class CdPicViewSet(ModelViewSet):
     queryset = Cd_pic.objects.all()
