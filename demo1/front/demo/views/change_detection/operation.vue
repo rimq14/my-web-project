@@ -2,75 +2,71 @@
   <div class="current-page">
     <el-container>
       <el-header>
-        <el-button type="text" @click="dialog = true">添加图片</el-button>
-        <el-button type="text" @click="rectImage">选择区域</el-button>
-        <el-button type="text" @click="rectCancel">删除区域</el-button>
-        <el-button type="text" @click="run">运行推理</el-button>
+        <el-button type="text"
+                   @click="dialog = true">添加图片</el-button>
+        <el-button type="text"
+                   @click="rectImage">选择区域</el-button>
+        <el-button type="text"
+                   @click="rectCancel">删除区域</el-button>
+        <el-button type="text"
+                   @click="run">运行推理</el-button>
       </el-header>
       <el-container>
-        <el-drawer
-          title="图片上传"
-          :before-close="handleClose"
-          :visible.sync="dialog"
-          direction="ltr"
-          custom-class="demo-drawer"
-          ref="drawer"
-        >
+        <el-drawer title="图片上传"
+                   :before-close="handleClose"
+                   :visible.sync="dialog"
+                   direction="ltr"
+                   custom-class="demo-drawer"
+                   ref="drawer">
           <div class="demo-drawer__content">
             <!-- form表单 -->
-            <el-form
-              :model="ruleForm"
-              :rules="rules"
-              ref="ruleForm"
-              label-width="100px"
-            >
-              <el-form-item label="地区名称" prop="name">
-                <el-input
-                  v-model="ruleForm.name"
-                  style="width: 150px"
-                ></el-input>
+            <el-form :model="ruleForm"
+                     :rules="rules"
+                     ref="ruleForm"
+                     label-width="100px">
+              <el-form-item label="地区名称"
+                            prop="name">
+                <el-input v-model="ruleForm.name"
+                          style="width: 150px"></el-input>
               </el-form-item>
 
-              <el-form-item label="上传图片" prop="image_url">
+              <el-form-item label="上传图片"
+                            prop="image_url">
                 <!-- 图片选择 -->
-                <el-upload
-                  list-type="picture-card"
-                  class="image-uploader"
-                  action="none"
-                  :on-change="fileChange"
-                  :auto-upload="false"
-                >
+                <el-upload list-type="picture-card"
+                           class="image-uploader"
+                           action="none"
+                           :on-change="fileChange"
+                           :auto-upload="false">
                   <i class="el-icon-plus"></i>
-                  <div slot="file" slot-scope="{ file }">
-                    <img
-                      class="el-upload-list__item-thumbnail"
-                      :src="file.url"
-                      alt=""
-                    />
+                  <div slot="file"
+                       slot-scope="{ file }">
+                    <img class="el-upload-list__item-thumbnail"
+                         :src="file.url"
+                         alt="" />
+
                     <span class="el-upload-list__item-actions">
-                      <span
-                        class="el-upload-list__item-preview"
-                        @click="handlePictureCardPreview(file)"
-                      >
+                      <span class="el-upload-list__item-preview"
+                            @click="handlePictureCardPreview(file)">
                         <i class="el-icon-zoom-in"></i>
                       </span>
                     </span>
+                    
                   </div>
                 </el-upload>
                 <!-- 图片缩略图显示 -->
                 <el-dialog :visible.sync="dialogVisible">
-                  <img width="100%" :src="dialogImageUrl" alt="" />
+                  <img width="100%"
+                       :src="dialogImageUrl"
+                       alt="" />
                 </el-dialog>
               </el-form-item>
             </el-form>
             <!-- 抽屉按键 -->
             <div class="demo-drawer__footer">
-              <el-button
-                type="primary"
-                @click="submitForm('ruleForm')"
-                :loading="loading"
-                >{{ loading ? "上传中 ..." : "上传" }}</el-button
-              >
+              <el-button type="primary"
+                         @click="submitForm('ruleForm')"
+                         :loading="loading">{{ loading ? "上传中 ..." : "上传" }}</el-button>
               <el-button @click="cancelForm">取 消</el-button>
             </div>
           </div>
@@ -79,11 +75,9 @@
         <div class="right">
           <el-main>
             <!--  style控制图片渲染的范围  -->
-            <canvas
-              id="layer"
-              :width="canvasWidth"
-              :height="canvasHeight"
-            ></canvas>
+            <canvas id="layer"
+                    :width="canvasWidth"
+                    :height="canvasHeight"></canvas>
           </el-main>
         </div>
       </el-container>
@@ -97,7 +91,7 @@ import axios from "axios";
 import { getImages, postPic, postName } from "../../api/apiRequest";
 export default {
   name: "operation",
-  data() {
+  data () {
     return {
       canvasWidth: 1900, // 画布大小
       canvasHeight: 1300,
@@ -141,14 +135,14 @@ export default {
       },
     };
   },
-  mounted() {
+  mounted () {
     // this.loadinfo();   // 获取图片信息
     this.layer = document.getElementById("layer");
     this.ctx = this.layer.getContext("2d");
     // this.canvasEventsInit();
   },
   methods: {
-    handleClose(done) {
+    handleClose (done) {
       if (this.loading) {
         return;
       }
@@ -164,14 +158,14 @@ export default {
             }, 400);
           }, 4000);
         })
-        .catch((_) => {});
+        .catch((_) => { });
     }, // 关闭抽屉
-    cancelForm() {
+    cancelForm () {
       this.loading = false;
       this.dialog = false;
       clearTimeout(this.timer);
     }, // 关闭抽屉
-    openFullScreen() {
+    openFullScreen () {
       const loading = this.$loading({
         lock: true,
         text: "Loading",
@@ -182,10 +176,10 @@ export default {
         loading.close();
       }, 2000);
     },
-    fileChange(file) {
+    fileChange (file) {
       this.ruleForm.image_url = file.raw;
     }, // 表单信息填写
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // 请求体编码,使用form-data库
@@ -204,11 +198,11 @@ export default {
         }
       });
     }, // 提交表单
-    handlePictureCardPreview(file) {
+    handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     }, // 缩略图可视化
-    splitImage(name) {
+    splitImage (name) {
       this.imageName = name;
       var splitData = new FormData();
       // console.log("拆分图片的名称：",name);
@@ -217,7 +211,7 @@ export default {
         this.loadImages(name);
       });
     }, // 对图片进行拆分
-    loadImages(name) {
+    loadImages (name) {
       var _this = this;
       _this.openFullScreen(); // loading
       getImages().then((res) => {
@@ -231,7 +225,7 @@ export default {
         _this.preImg(); // 图片拼接
       });
     }, // 加载图片块
-    preImg() {
+    preImg () {
       // console.log("开始加载")
       var _this = this,
         imgList = _this.imgList;
@@ -256,10 +250,10 @@ export default {
             count++;
           // 图片信息添加完毕
           if (count >= length) {
-            // extraImg.onload = function () {
-              _this.imgObject = imageList;
-              _this.drawImage(imageList);
-            // };
+            extraImg.onload = function () {
+            _this.imgObject = imageList;
+            _this.drawImage(imageList);
+            };
           }
         }
         // console.log(imageList);
@@ -268,7 +262,7 @@ export default {
         _this.drawImage(imageList);
       }
     }, // 图片拼接
-    drawImage(imageList) {
+    drawImage (imageList) {
       var _this = this;
       _this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
       for (var i = 0; i < imageList.length; i++) {
@@ -283,13 +277,13 @@ export default {
       _this.canvasEventsInit(); // 图片移动
       _this.canvasMouseWheel(); // 图片缩放操作
     }, // 图片加载
-    rectar(x, y, width, height) {
+    rectar (x, y, width, height) {
       this.x = x;
       this.y = y;
       this.width = width;
       this.height = height;
     }, // 定义矩形框
-    drawRect() {
+    drawRect () {
       var _this = this;
       var rect = _this.rectangles[_this.rectangles.length - 1]; // 取数组最后一个元素
       _this.ctx.beginPath();
@@ -299,31 +293,21 @@ export default {
       _this.ctx.lineWidth = 3; // 线宽设置，必须放在绘制之前-->
       _this.ctx.strokeRect(rect.x, rect.y, rect.width, rect.height); // 矩形绘制
     }, // 绘制矩形
-    rectImage() {
+    rectImage () {
       var _this = this;
       _this.rectflag = true;
     }, // 框选图片
-    windowToCanvas(x, y, type) {
-      //返回元素的大小以及位置
-      var bbox = canvas.getBoundingClientRect();
-      // bbox 的宽度会加上 canvas 的 border 会影响精度
-      return new Point(
-        x - bbox.left * (canvas.width / bbox.width),
-        y - bbox.top * (canvas.height / bbox.height),
-        type
-      );
-    },
-    run() {
+    run () {
       var _this = this;
       var rect = _this.rectangles[_this.rectangles.length - 1]; // 取数组最后一个元素
 
       var params = {
         name: _this.imageName,
-        x1 :_this.pos.x - _this.imgX,
-        y1 :_this.pos.y - _this.imgY,
-        x2 :_this.pos.x - _this.imgX + rect.width,
-        y2 :_this.pos.y - _this.imgY + rect.height,
-        scale:_this.imgScale
+        x1: _this.pos.x - _this.imgX,
+        y1: _this.pos.y - _this.imgY,
+        x2: _this.pos.x - _this.imgX + rect.width,
+        y2: _this.pos.y - _this.imgY + rect.height,
+        scale: _this.imgScale
       };
 
       axios
@@ -332,13 +316,13 @@ export default {
           console.log(res);
         });
     }, // 进行框选区域图片推理
-    rectCancel() {
+    rectCancel () {
       var _this = this;
       _this.rectangles.length = 0;
       _this.drawImage(_this.imgObject); //重新绘制图片
     }, // 取消框选的区域
 
-    canvasEventsInit() {
+    canvasEventsInit () {
       var _this = this,
         canvas = _this.layer;
       canvas.onmousedown = function (e) {
@@ -349,7 +333,7 @@ export default {
           y: e.clientY - canvas.offsetTop,
         }; //鼠标点击坐标
         _this.pos = pos;
-        console.log(pos.x,pos.y);
+        console.log(pos.x, pos.y);
         canvas.onmousemove = function (e) {
           var movenumber = {
             x: e.clientX - canvas.offsetLeft - pos.x,
@@ -381,7 +365,7 @@ export default {
         };
       };
     },
-    canvasMouseWheel() {
+    canvasMouseWheel () {
       var _this = this,
         canvas = _this.layer;
       canvas.onmousewheel = canvas.onwheel = function (event) {

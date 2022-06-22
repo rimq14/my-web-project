@@ -10,7 +10,7 @@
           功能选项
           <ul class="dropdown">
             <li>
-              <router-link class="list-group-item" to="/experience/change_detection">
+              <router-link class="list-group-item" to="/change_detection/operation">
                 变化检测
               </router-link>
             </li>
