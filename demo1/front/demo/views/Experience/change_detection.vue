@@ -21,7 +21,7 @@
 
       <!-- 示例数据 -->
       <h4 style="color: white; font-weight: 400; margin-top: 10px">示例数据</h4>
-      <img :src="src" class="example" />
+      <img :src="src" class="example" alt="示例图片" />
     </div>
 
     <div class="el_main">
@@ -30,28 +30,37 @@
 
       <!-- 按钮 -->
       <div class="buttons">
-        <el-tooltip class="item" effect="dark" content="框选" placement="top">
-          <el-button icon="el-icon-search" circle @click="rectImage"></el-button>
-        </el-tooltip>
 
+        <div class="button">
+        <el-tooltip class="item" effect="light" content="框选" placement="right-start">
+          <el-button type="text" icon="el-icon-search" @click="rectImage"></el-button>
+        </el-tooltip>
+        </div>
+
+        <div class="button">
         <el-tooltip
           class="item"
-          effect="dark"
+          effect="light"
           content="运行推理"
-          placement="top"
+          placement="right-start"
         >
-          <el-button icon="el-icon-video-play" circle @click="run"></el-button>
+          <el-button type="text" icon="el-icon-video-play" @click="run"></el-button>
         </el-tooltip>
+        </div>
 
+        <div class="button">
         <el-tooltip
           class="item"
-          effect="dark"
+          effect="light"
           content="取消选框"
-          placement="top"
+          placement="right-start"
         >
-          <el-button icon="el-icon-close" circle @click="rectCancel"></el-button>
+          <el-button type="text" icon="el-icon-close" @click="rectCancel"></el-button>
         </el-tooltip>
+        </div>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -59,7 +68,6 @@
 <script>
 import axios from "axios";
 import { getImages } from "../../api/apiRequest";
-
 import picfive from "./pic/tool3.svg";
 
 export default {
@@ -79,16 +87,6 @@ export default {
       rectflag: false, // 框选标志位
       rectangles: [], // 框选的参数
       pos: {}, // 存储点击鼠标坐标
-      rate: {}, // 框选的位置在图片的比例
-      pictureSize: {}, // 图片的尺寸
-      dialog: false,
-      loading: false,
-      dialogImageUrl: "",
-      dialogVisible: false,
-      disabled: false,
-      formLabelWidth: "80px",
-      timer: null,
-      fullscreenLoading: false,
       src: "http://127.0.0.1:8000/media/pictures/b54410e4d8.png",
       picfive: picfive,
     };
@@ -305,8 +303,20 @@ export default {
   padding-bottom: auto;
   padding-top: auto;
 }
+.buttons {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right:10%;
+  top: 60%;
+  text-align: center;
+}
+.el-button {
+  margin-top: 20px;
+  background-color: rgb(14, 14, 17);
+}
 </style>
-<style>
+<style scoped>
 * {
   margin: 0;
   padding: 0;
@@ -342,6 +352,7 @@ export default {
   margin-top: 23px;
   border: 2px rgb(38, 109, 215) solid;
 }
+
 /*侧边栏那一块*/
 .aside_down {
   width: 440px;
